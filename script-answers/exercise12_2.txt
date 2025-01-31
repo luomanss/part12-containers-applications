@@ -1,0 +1,16 @@
+Script started on 2025-01-31 09:05:11+02:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="108" LINES="28"]
+[?2004h]0;luomanss@torni: ~/part12-containers-applications[01;32mluomanss@torni[00m:[01;34m~/part12-containers-applications[00m$ sudo [7mdocker run -it ubuntu bash[27mdocker run -it ubuntu bash
+[?2004l[sudo] password for luomanss: 
+Unable to find image 'ubuntu:latest' locally
+latest: Pulling from library/ubuntu
+
+[1A[2Kde44b265507a: Pulling fs layer [1B[1A[2Kde44b265507a: Downloading  306.4kB/29.75MB[1B[1A[2Kde44b265507a: Downloading  1.538MB/29.75MB[1B[1A[2Kde44b265507a: Downloading  3.087MB/29.75MB[1B[1A[2Kde44b265507a: Downloading  4.954MB/29.75MB[1B[1A[2Kde44b265507a: Downloading  7.133MB/29.75MB[1B[1A[2Kde44b265507a: Downloading  8.989MB/29.75MB[1B[1A[2Kde44b265507a: Downloading  11.46MB/29.75MB[1B[1A[2Kde44b265507a: Downloading  13.95MB/29.75MB[1B[1A[2Kde44b265507a: Downloading  16.41MB/29.75MB[1B[1A[2Kde44b265507a: Downloading  18.89MB/29.75MB[1B[1A[2Kde44b265507a: Downloading  21.36MB/29.75MB[1B[1A[2Kde44b265507a: Downloading   23.8MB/29.75MB[1B[1A[2Kde44b265507a: Downloading  26.27MB/29.75MB[1B[1A[2Kde44b265507a: Downloading   28.1MB/29.75MB[1B[1A[2Kde44b265507a: Verifying Checksum [1B[1A[2Kde44b265507a: Download complete [1B[1A[2Kde44b265507a: Extracting  327.7kB/29.75MB[1B[1A[2Kde44b265507a: Extracting  6.226MB/29.75MB[1B[1A[2Kde44b265507a: Extracting  9.503MB/29.75MB[1B[1A[2Kde44b265507a: Extracting  17.04MB/29.75MB[1B[1A[2Kde44b265507a: Extracting   24.9MB/29.75MB[1B[1A[2Kde44b265507a: Extracting  25.56MB/29.75MB[1B[1A[2Kde44b265507a: Extracting  28.18MB/29.75MB[1B[1A[2Kde44b265507a: Extracting  29.49MB/29.75MB[1B[1A[2Kde44b265507a: Extracting  29.75MB/29.75MB[1B[1A[2Kde44b265507a: Pull complete [1BDigest: sha256:80dd3c3b9c6cecb9f1667e9290b3bc61b78c2678c02cbdae5f0fea92cc6734ab
+Status: Downloaded newer image for ubuntu:latest
+[?2004h]0;root@65e32dde4af2: /root@65e32dde4af2:/# mkdir /usr/src/app
+[?2004l[?2004h]0;root@65e32dde4af2: /root@65e32dde4af2:/# touch /usr/src/app/index.js
+[?2004l[?2004h]0;root@65e32dde4af2: /root@65e32dde4af2:/# [Kexit
+[?2004lexit
+[?2004h]0;luomanss@torni: ~/part12-containers-applications[01;32mluomanss@torni[00m:[01;34m~/part12-containers-applications[00m$ exit
+[?2004lexit
+
+Script done on 2025-01-31 09:07:31+02:00 [COMMAND_EXIT_CODE="0"]
