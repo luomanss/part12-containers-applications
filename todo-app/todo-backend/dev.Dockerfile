@@ -8,6 +8,6 @@ USER node
 
 COPY --chown=node:node . .
 
-RUN npm ci
+RUN npm install
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

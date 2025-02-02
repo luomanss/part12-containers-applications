@@ -1,0 +1,13 @@
+include:
+  - ./todo-frontend/docker-compose.dev.yml
+  - ./todo-backend/docker-compose.dev.yml
+services:
+  nginx:
+    image: nginx:1.23-alpine
+    ports:
+      - 8080:80
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+      - server
