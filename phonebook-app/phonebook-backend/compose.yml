@@ -1,0 +1,25 @@
+services:
+  phonebook-backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgres://postgres:mysecretpassword@db/postgres
+    depends_on:
+      - db
+      - migrations
+  db:
+    image: "postgres"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: postgres
+  migrations:
+    build: 
+      context: .
+      dockerfile: migrations.Dockerfile
+    depends_on:
+      - db
+    command: ["sqlx", "migrate", "run"]
+    environment:
+      - DATABASE_URL=postgres://postgres:mysecretpassword@db/postgres

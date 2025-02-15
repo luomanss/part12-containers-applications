@@ -10,7 +10,11 @@ RUN apt install libssl-dev
 
 RUN cargo install trunk
 
-RUN trunk build --release
+ARG BACKEND_URL
+
+ENV BACKEND_URL=$BACKEND_URL
+
+RUN  trunk build --release
 
 FROM lipanski/docker-static-website:latest
 

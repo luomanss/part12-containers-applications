@@ -1,0 +1,11 @@
+name: phonebook-frontend-dev
+services:
+  phonebook-frontend:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/target
+    environment:
+      - BACKEND_URL=http://localhost/api

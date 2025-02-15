@@ -1,0 +1,31 @@
+name: phonebook-backend-dev
+services:
+  phonebook-backend:
+    build: 
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://postgres:mysecretpassword@db/postgres
+    depends_on:
+      - db
+      - migrations
+    volumes:
+      - .:/usr/src/phonebook-backend
+      - /usr/src/phonebook-backend/target
+  db:
+    image: "postgres"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: postgres
+  migrations:
+    build: 
+      context: .
+      dockerfile: migrations.Dockerfile
+    depends_on:
+      - db
+    command: ["sqlx", "migrate", "run"]
+    environment:
+      - DATABASE_URL=postgres://postgres:mysecretpassword@db/postgres

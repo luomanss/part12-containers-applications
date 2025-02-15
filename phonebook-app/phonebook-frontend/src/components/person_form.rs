@@ -3,7 +3,7 @@ use leptos::{ev::SubmitEvent, prelude::*};
 use crate::{app::GetAllPersons, model::NewPerson, services::persons::add, util::WakerSender};
 
 #[component]
-pub fn PersonForm() -> impl IntoView {
+pub fn person_form() -> impl IntoView {
     let (name, set_name) = signal(String::new());
     let (number, set_number) = signal(String::new());
     let waker = use_context::<WakerSender<GetAllPersons>>().unwrap();

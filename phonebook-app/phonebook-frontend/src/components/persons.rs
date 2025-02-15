@@ -5,11 +5,11 @@ use crate::{
 use leptos::prelude::*;
 
 #[component]
-pub fn Persons(persons: Signal<Vec<Person>>, filter: ReadSignal<String>) -> impl IntoView {
+pub fn persons(persons: Signal<Vec<Person>>, filter: ReadSignal<String>) -> impl IntoView {
     let waker = use_context::<WakerSender<GetAllPersons>>().unwrap();
     let notify = use_context::<Action<Notification, ()>>().unwrap();
 
-    let filteredPersons = move || {
+    let filtered_persons = move || {
         persons
             .get()
             .into_iter()
@@ -26,7 +26,7 @@ pub fn Persons(persons: Signal<Vec<Person>>, filter: ReadSignal<String>) -> impl
         let person = person.clone();
 
         async move {
-            remove(&person.id).await;
+            remove(person.id).await;
             waker.wake();
             notify.dispatch(Notification::success(
                 format!("Deleted {}", person.name).as_str(),
@@ -37,8 +37,8 @@ pub fn Persons(persons: Signal<Vec<Person>>, filter: ReadSignal<String>) -> impl
     view! {
         <div>
             <For
-                each=move || filteredPersons()
-                key=|person| person.id.clone()
+                each=move || filtered_persons()
+                key=|person| person.id
                 children=move |person| {
                     view! {
                         <div>

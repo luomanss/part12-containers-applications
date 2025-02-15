@@ -29,7 +29,7 @@ impl Notification {
 }
 
 #[component]
-pub fn Notification(notification: ReadSignal<Option<Notification>>) -> impl IntoView {
+pub fn notification(notification: ReadSignal<Option<Notification>>) -> impl IntoView {
     let success = move || {
         notification
             .get()

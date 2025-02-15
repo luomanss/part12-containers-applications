@@ -39,13 +39,13 @@ pub struct WakerSender<T: 'static>(RwSignal<Waker<T>>);
 
 impl<T> WakerSender<T> {
     pub fn wake(&self) {
-        self.0.set(self.0.get().next());
+        self.0.set(self.0.get_untracked().next());
     }
 }
 
 impl<T> Clone for WakerSender<T> {
     fn clone(&self) -> Self {
-        Self(self.0.clone())
+        *self
     }
 }
 
@@ -55,7 +55,7 @@ pub struct WakerReceiver<T: 'static>(RwSignal<Waker<T>>);
 
 impl<T> Clone for WakerReceiver<T> {
     fn clone(&self) -> Self {
-        Self(self.0.clone())
+        *self
     }
 }
 
@@ -69,7 +69,7 @@ impl<T> WakerReceiver<T> {
 
 pub fn use_waker<T>() -> WakerReceiver<T> {
     let waker_signal = RwSignal::new(Waker::<T>::default());
-    let waker_sender = WakerSender(waker_signal.clone());
+    let waker_sender = WakerSender(waker_signal);
     let waker_receiver = WakerReceiver(waker_signal);
 
     provide_context(waker_sender);

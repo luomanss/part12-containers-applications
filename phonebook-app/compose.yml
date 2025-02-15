@@ -1,0 +1,14 @@
+include:
+  - ./phonebook-backend/compose.yml
+  - ./phonebook-frontend/compose.yml
+services:
+  reverse-proxy:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - phonebook-backend
+      - phonebook-frontend

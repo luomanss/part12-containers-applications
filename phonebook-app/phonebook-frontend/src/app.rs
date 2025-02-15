@@ -10,7 +10,7 @@ use crate::{
 pub struct GetAllPersons;
 
 #[component]
-pub fn App() -> impl IntoView {
+pub fn app() -> impl IntoView {
     let (filter, set_filter) = signal(String::new());
     let (notification, set_notification) = signal(None);
     let waker = use_waker::<GetAllPersons>();

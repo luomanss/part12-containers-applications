@@ -1,0 +1,8 @@
+name: phonebook-frontend
+services:
+  phonebook-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BACKEND_URL=http://localhost/api

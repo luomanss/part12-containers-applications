@@ -1,77 +1,103 @@
-use std::cell::RefCell;
+use futures::channel::oneshot;
+use gloo_utils::format::JsValueSerdeExt;
+use wasm_bindgen::{JsCast, JsValue};
+use wasm_bindgen_futures::{spawn_local, JsFuture};
+use web_sys::{Request, RequestInit, Response};
 
 use crate::model::{NewPerson, Person};
 
-thread_local! {
-    static PERSONS: RefCell<Vec<Person>> = RefCell::new(vec![
-        Person {
-            id: "1".to_string(),
-            name: "John Doe".to_string(),
-            number: "1234567890".to_string(),
-        },
-        Person {
-            id: "2".to_string(),
-            name: "Jane Doe".to_string(),
-            number: "0987654321".to_string(),
-        },
-    ]);
-}
+const BACKEND_URL: Option<&str> = option_env!("BACKEND_URL");
 
 pub async fn get_all() -> Vec<Person> {
-    // reqwest::get("http://localhost:3000/persons")
-    //     .await
-    //     .unwrap()
-    //     .json()
-    //     .await
-    //     .unwrap()
+    let opts = RequestInit::new();
+    let url = format!("{}/persons", BACKEND_URL.unwrap_or("http://localhost:3000"));
 
-    PERSONS.with(|persons| persons.borrow().clone())
+    opts.set_method("GET");
+
+    let request = Request::new_with_str_and_init(&url, &opts).unwrap();
+    let window = web_sys::window().unwrap();
+    let response: Response = JsFuture::from(window.fetch_with_request(&request))
+        .await
+        .unwrap()
+        .dyn_into()
+        .unwrap();
+
+    let response = JsFuture::from(response.json().unwrap()).await.unwrap();
+
+    response.into_serde().unwrap()
 }
 
-pub async fn remove(id: &str) {
-    // reqwest::delete(&format!("http://localhost:3000/persons/{}", id))
-    //     .await
-    //     .unwrap()
+pub async fn remove(id: u32) {
+    let (send, recv) = oneshot::channel();
 
-    PERSONS.with(|persons| {
-        let mut persons = persons.borrow_mut();
+    spawn_local(async move {
+        let opts = RequestInit::new();
+        let url = format!(
+            "{}/persons/{}",
+            BACKEND_URL.unwrap_or("http://localhost:3000"),
+            id
+        );
 
-        persons.retain(|person| person.id != id);
+        opts.set_method("DELETE");
+
+        let request = Request::new_with_str_and_init(&url, &opts).unwrap();
+        let window = web_sys::window().unwrap();
+        let _ = JsFuture::from(window.fetch_with_request(&request)).await;
+
+        send.send(()).unwrap();
     });
+
+    let _ = recv.await;
 }
 
 pub async fn add(person: NewPerson) {
-    // reqwest::post("http://localhost:3000/persons")
-    //     .json(&person)
-    //     .send()
-    //     .await
-    //     .unwrap()
+    let (send, recv) = oneshot::channel();
 
-    PERSONS.with(|persons| {
-        let mut persons = persons.borrow_mut();
-        let person = Person {
-            id: (persons.len() + 1).to_string(),
-            name: person.name,
-            number: person.number,
-        };
+    spawn_local(async move {
+        let opts = RequestInit::new();
+        let url = format!("{}/persons", BACKEND_URL.unwrap_or("http://localhost:3000"));
 
-        persons.push(person);
+        opts.set_method("POST");
+        opts.set_body(&JsValue::from_str(
+            serde_json::to_string(&person).unwrap().as_str(),
+        ));
+
+        let request = Request::new_with_str_and_init(&url, &opts).unwrap();
+
+        request
+            .headers()
+            .set("content-type", "application/json")
+            .unwrap();
+
+        let window = web_sys::window().unwrap();
+        let _ = JsFuture::from(window.fetch_with_request(&request)).await;
+
+        send.send(()).unwrap();
     });
+
+    let _ = recv.await;
 }
 
-pub async fn update(id: &str, NewPerson { name, number }: NewPerson) {
-    // reqwest::put(&format!("http://localhost:3000/persons/{}", id))
-    //     .json(&person)
-    //     .send()
-    //     .await
-    //     .unwrap()
+pub async fn update(id: u32, person: NewPerson) {
+    let (send, recv) = oneshot::channel();
 
-    PERSONS.with(|persons| {
-        let mut persons = persons.borrow_mut();
+    spawn_local(async move {
+        let opts = RequestInit::new();
+        let url = format!(
+            "{}/persons/{}",
+            BACKEND_URL.unwrap_or("http://localhost:3000"),
+            id
+        );
 
-        persons.iter_mut().find(|person| person.id == id).map(|person| {
-            person.name = name;
-            person.number = number;
-        });
+        opts.set_method("PATCH");
+        opts.set_body(&JsValue::from_serde(&person).unwrap());
+
+        let request = Request::new_with_str_and_init(&url, &opts).unwrap();
+        let window = web_sys::window().unwrap();
+        let _ = JsFuture::from(window.fetch_with_request(&request)).await;
+
+        send.send(()).unwrap();
     });
+
+    let _ = recv.await;
 }

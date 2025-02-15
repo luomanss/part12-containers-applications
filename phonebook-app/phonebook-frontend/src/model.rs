@@ -1,6 +1,6 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone)]
+#[derive(Serialize, Clone)]
 pub struct NewPerson {
     pub name: String,
     pub number: String,
@@ -8,7 +8,7 @@ pub struct NewPerson {
 
 #[derive(Deserialize, Clone)]
 pub struct Person {
-    pub id: String,
+    pub id: u32,
     pub name: String,
     pub number: String,
 }
